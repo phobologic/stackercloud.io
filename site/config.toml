@@ -1,0 +1,43 @@
+title = "stackercloud.io"
+baseURL = "https://blog.stackercloud.io"
+tags = ["blog"]
+languageCode = "en-US"
+config = "config.toml"
+theme = "osprey"
+canonifyURLS = true
+googleAnalytics = ""
+disqusShortname = "stackercloud-io"
+disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
+
+[Params]
+    tagline = "CloudFormation management made simple..."
+    author = "Michael E. Barrett"
+    description = ""
+    logoBig = "/images/stacker-title.png"
+    logoSmall = "/images/stacker-logo.png"
+    favicon = "favicon.png"
+    opengraphImage = "/images/stacker-title.png"
+    twitter = "stackercloud"
+    github = "cloudtools/stacker"
+    email = "admin@stackercloud.io"
+    googleTagManager = ""
+    highlightJS = true
+    copyright = true
+    credit = true
+    customCSS = false
+    cacheBustCSS = false
+    cacheBustJS = false
+    ajaxFormspree = true
+
+[[menu.main]]
+    name = "About"
+    url  = "/#about"
+    weight = 1
+[[menu.main]]
+    name = "Blog"
+    url  = "/#blog"
+    weight = 2
+[[menu.main]]
+    name = "Contact"
+    url  = "/#contact"
+    weight = 3

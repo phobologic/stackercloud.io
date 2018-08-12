@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "stackercloud.io"
+version = "0.1.0"
+description = ""
+authors = ["Michael Barrett <loki77@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "*"
+stacker_blueprints = { git = "https://github.com/cloudtools/stacker_blueprints.git" }
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"

@@ -1,0 +1,79 @@
+namespace: stackercloud-io
+
+sys_path: .
+
+stacks:
+  - name: buckets
+    class_path: stacker_blueprints.s3.Buckets
+    variables:
+      Buckets:
+        blog:
+          BucketName: blog.stackercloud.io
+          AccessControl: PublicRead
+          WebsiteConfiguration:
+            RedirectAllRequestsTo:
+              HostName: stackercloud.io
+              Protocol: https
+        root:
+          BucketName: stackercloud.io
+          AccessControl: PublicRead
+          WebsiteConfiguration:
+            IndexDocument: index.html
+        www:
+          BucketName: www.stackercloud.io
+          WebsiteConfiguration:
+            RedirectAllRequestsTo:
+              HostName: stackercloud.io
+              Protocol: https
+  - name: dns
+    class_path: stacker_blueprints.route53.DNSRecords
+    variables:
+      HostedZoneName: stackercloud.io.
+      Comment: stackercloud.io domain managed by stacker
+      RecordSets:
+        - Name: stackercloud.io.
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: ${output cloudfront-distribution::DomainName}
+        - Name: www.stackercloud.io.
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: ${output cloudfront-distribution::DomainName}
+        - Name: blog.stackercloud.io.
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: ${output cloudfront-distribution::DomainName}
+        - Name: stackercloud.io.
+          Type: TXT
+          TTL: 300
+          ResourceRecords:
+            - '"zoho-verification=zb15340492.zmverify.zoho.com"'
+            - '"v=spf1 include:zoho.com ~all"'
+        - Name: stackercloud.io.
+          Type: MX
+          TTL: 300
+          ResourceRecords:
+            - 10 mx.zoho.com
+            - 20 mx2.zoho.com
+            - 50 mx3.zoho.com
+  - name: certificates
+    class_path: stacker_blueprints.certificate_manager.Certificates
+    variables:
+      Certificates:
+        stackercloud:
+          DomainName: stackercloud.io
+          SubjectAlternativeNames:
+            - blog.stackercloud.io
+            - www.stackercloud.io
+  - name: cloudfront-distribution
+    class_path: blueprints.cloudfront.S3BackedDistribution
+    variables:
+      OriginBucketUrl: ${output buckets::rootBucketId}.${output buckets::rootWebsiteEndpoint}
+      CertificateArn: ${output certificates::stackercloudArn}
+      Aliases:
+        - stackercloud.io
+        - blog.stackercloud.io
+        - www.stackercloud.io
